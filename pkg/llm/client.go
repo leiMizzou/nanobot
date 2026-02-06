@@ -22,8 +22,9 @@ type Config struct {
 
 func NewClient(cfg Config) *Client {
 	return &Client{
-		useCompletions: cfg.Responses.ChatCompletionAPI,
-		defaultModel:   cfg.DefaultModel,
+		useCompletions:     cfg.Responses.ChatCompletionAPI,
+		defaultModel:       cfg.DefaultModel,
+		customOpenAIBaseURL: cfg.Responses.BaseURL != "",
 		completions: completions.NewClient(completions.Config{
 			APIKey:  cfg.Responses.APIKey,
 			BaseURL: cfg.Responses.BaseURL,
@@ -35,11 +36,12 @@ func NewClient(cfg Config) *Client {
 }
 
 type Client struct {
-	defaultModel   string
-	useCompletions bool
-	completions    *completions.Client
-	responses      *responses.Client
-	anthropic      *anthropic.Client
+	defaultModel        string
+	useCompletions      bool
+	customOpenAIBaseURL bool
+	completions         *completions.Client
+	responses           *responses.Client
+	anthropic           *anthropic.Client
 }
 
 func (c Client) Complete(ctx context.Context, req types.CompletionRequest, opts ...types.CompletionOptions) (ret *types.CompletionResponse, _ error) {
@@ -67,7 +69,7 @@ func (c Client) Complete(ctx context.Context, req types.CompletionRequest, opts 
 		}
 	}
 
-	if strings.HasPrefix(req.Model, "claude") {
+	if strings.HasPrefix(req.Model, "claude") && !c.customOpenAIBaseURL {
 		return c.anthropic.Complete(ctx, req, opts...)
 	}
 	if c.useCompletions {

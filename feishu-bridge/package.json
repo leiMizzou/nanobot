@@ -1,0 +1,14 @@
+{
+  "name": "nanobot-feishu-bridge",
+  "version": "1.0.0",
+  "description": "Bridge service connecting Feishu (Lark) bot to Nanobot MCP-UI",
+  "type": "module",
+  "main": "bridge.mjs",
+  "scripts": {
+    "start": "node bridge.mjs",
+    "dev": "node --watch bridge.mjs"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

@@ -20,3 +20,8 @@ packages/ui/dist
 # Ignore zed files
 .zed/
 __debug_*
+
+# Feishu bridge secrets
+feishu-bridge/.env
+nanobot.yaml
+nanobot.env
